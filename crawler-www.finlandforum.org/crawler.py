@@ -47,7 +47,7 @@ def get_page_html(topic_link_list) :
         # 从第二页开始，遍历每一页
         page_url = soup.find_all('a', {'class' : 'button', 'role' : 'button'})[1].get('href')
         page_url = re.search(r".(/.*)", page_url).group(1).replace("amp;", "")
-        page_url = re.sub(r"50", "", page_url)
+        page_url = page_url[0:-2]
         for j in range(2, page_total+1) :
             url = page_url + str((j - 1) * 50)
             url_list.append("https://www.finlandforum.org" + url)
@@ -95,6 +95,9 @@ def get_html_link(link_list) :
             print(i)
             print("内容为空， 跳过此网站")
             continue
+        if len(content) == 0 :
+            print(str(url) + "\t 此网站无内容 跳过此网站")
+            continue
         content = content[0].text
         # 处理内容，替换字符串中的字符，去掉正文中的图片信息
         content = contentDeal.deal_content(content)
@@ -106,7 +109,11 @@ def get_html_link(link_list) :
                 continue
             review = review + "<p>" + reviewDeal.deal_review(rev.text) + "<p>"
         # 通过标签名查找 时间 
-        time = soup.select('.author')[0].get_text()[-26:-1]
+        time = ""
+        if len(soup.select('.author')) == 0 :
+            print(str(url) + "\t此网站时间不可获取")
+        else :
+            time = soup.select('.author')[0].get_text()[-26:-1]
         type = "forum"
         # 给字典赋值
         data['title'] = title
@@ -133,7 +140,7 @@ def get_html_link(link_list) :
         # 从第二页开始，遍历每一页
         page_url = soup.find_all('a', {'class' : 'button', 'role' : 'button'})[1].get('href')
         page_url = re.search(r".(/.*)", page_url).group(1).replace("amp;", "")
-        page_url = re.sub(r"15", "", page_url)
+        page_url = page_url[0:-2]
         for j in range(2, page_total+1) :
             url = page_url + str((j - 1) * 15)
             inner_after(dataList, data, "https://www.finlandforum.org" + url)
@@ -158,7 +165,11 @@ def inner_after(dataList, data, url) :
             continue
         review = review + "<p>" + reviewDeal.deal_review(rev.text) + "<p>"
     # 通过标签名查找 时间 
-    time = soup.select('.author')[0].get_text()[-26:-1]
+    time = ""
+    if len(soup.select('.author')) == 0 :
+        print(str(url) + "\t此网站时间不可获取")
+    else :
+        time = soup.select('.author')[0].get_text()[-26:-1]
     type = "forum"
     # 给字典赋值
     data['title'] = title
@@ -186,6 +197,9 @@ def visit_single_html(url) :
         print(url)
         print("内容为空， 跳过此网站")
         return dataList
+    if len(content) == 0 :
+        print(str(url) + "\t 此网站无内容")
+        return dataList
     content = content[0].text
     # 处理内容，替换字符串中的字符，去掉正文中的图片信息
     content = contentDeal.deal_content(content)
@@ -197,7 +211,11 @@ def visit_single_html(url) :
             continue
         review = review + "<p>" + reviewDeal.deal_review(rev.text) + "<p>"
     # 通过标签名查找 时间 
-    time = soup.select('.author')[0].get_text()[-26:-1]
+    time = ""
+    if len(soup.select('.author')) == 0 :
+        print(str(url) + "\t此网站时间不可获取")
+    else :
+        time = soup.select('.author')[0].get_text()[-26:-1]
     type = "forum"
     # 给字典赋值
     data['title'] = title
@@ -224,7 +242,7 @@ def visit_single_html(url) :
     # 从第二页开始，遍历每一页
     page_url = soup.find_all('a', {'class' : 'button', 'role' : 'button'})[1].get('href')
     page_url = re.search(r".(/.*)", page_url).group(1).replace("amp;", "")
-    page_url = re.sub(r"15", "", page_url)
+    page_url = page_url[0:-2]
     for j in range(2, page_total+1) :
         url = page_url + str((j - 1) * 15)
         inner_after(dataList, data, "https://www.finlandforum.org" + url)
@@ -253,8 +271,10 @@ def main() :
     urllib3.disable_warnings()
     url = 'https://www.finlandforum.org/'
     topic_link_list = get_html(url)
-    page_link_list = get_page_html(topic_link_list)
+    print(len(topic_link_list))
+    page_link_list = get_page_html(topic_link_list[8:])
     for link in page_link_list :
+        print(link)
         fun_call(url, link)
 if __name__=='__main__':
     main()
