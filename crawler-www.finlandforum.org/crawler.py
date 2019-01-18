@@ -87,7 +87,10 @@ def get_html_link(link_list) :
         html_link = requests.get(i)
         html_link.encoding='utf-8'
         soup = BeautifulSoup(html_link.text, 'lxml')
-        title = soup.title.string.replace(" - Finland Forum", "")    # 去掉结尾的论坛标记
+        # 去除 js 代码
+        [s.extract() for s in soup('script')]
+        # 去掉结尾的论坛标记
+        title = soup.title.string.replace(" - Finland Forum", "")
         url = i
         # 提取 论坛 内容
         content = soup.select(".content")
@@ -150,10 +153,16 @@ def get_html_link(link_list) :
 
 # 存储后几页的评论
 def inner_after(dataList, data, url) :
-    html_link = requests.get(url)
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+    }
+    html_link = requests.get(url, verify=False, headers=headers)
     html_link.encoding='utf-8'
     soup = BeautifulSoup(html_link.text, 'lxml')
-    title = soup.title.string.replace(" - Finland Forum", "")    # 去掉结尾的论坛标记
+    # 去除 js 代码
+    [s.extract() for s in soup('script')]
+    # 去掉结尾的论坛标记
+    title = soup.title.string.replace(" - Finland Forum", "")
     url = url
     # 提取 论坛 内容
     content = ""
@@ -183,14 +192,20 @@ def inner_after(dataList, data, url) :
 
 # 单独网页存储
 def visit_single_html(url) :
+    headers = {
+        'User-Agent': 'Mozilla/5.0 (Windows NT 10.0; Win64; x64) AppleWebKit/537.36 (KHTML, like Gecko) Chrome/71.0.3578.98 Safari/537.36'
+    }
     # 创建字典
     data = {'title': '', 'url': '','review': '', 'content': '', 'time': '', 'type': ''}
     dataList = []
     # 正常请求
-    html_link = requests.get(url)
+    html_link = requests.get(url, verify=False, headers=headers)
     html_link.encoding='utf-8'
     soup = BeautifulSoup(html_link.text, 'lxml')
-    title = soup.title.string.replace(" - Finland Forum", "")    # 去掉结尾的论坛标记
+    # 去除 js 代码
+    [s.extract() for s in soup('script')]
+    # 去掉结尾的论坛标记
+    title = soup.title.string.replace(" - Finland Forum", "")
     # 提取 论坛 内容
     content = soup.select(".content")
     if content is None :
@@ -271,8 +286,7 @@ def main() :
     urllib3.disable_warnings()
     url = 'https://www.finlandforum.org/'
     topic_link_list = get_html(url)
-    print(len(topic_link_list))
-    page_link_list = get_page_html(topic_link_list[8:])
+    page_link_list = get_page_html(topic_link_list[13:])
     for link in page_link_list :
         print(link)
         fun_call(url, link)
