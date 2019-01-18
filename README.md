@@ -26,11 +26,11 @@
 
 其中一个爬取结果的例子如下：
 
-{
-    "title":"I'm finish 9 month's",
-    "url":"https://www.finlandforum.org/viewtopic.php?f=2&t=97699&sid=c5d80bd59f5ef4d33805d96bad9c3d6f",
-    "review":"<p>The resolution is coming soon<p><p>I hope today I finish 9 months<p>",
-    "content":"Hi guys I waiting for nine months for family ties. I have had an interview at the embassy in Morocco and I'm still waiting a response ",
-    "time":" Fri Dec 07, 2018 3:41 pm",
-    "type":"forum"
-}
+	{
+		"title":"I'm finish 9 month's",
+		"url":"https://www.finlandforum.org/viewtopic.php?f=2&t=97699&sid=c5d80bd59f5ef4d33805d96bad9c3d6f",
+		"review":"<p>The resolution is coming soon<p><p>I hope today I finish 9 months<p>",
+		"content":"Hi guys I waiting for nine months for family ties. I have had an interview at the embassy in Morocco and I'm still waiting a response ",
+		"time":" Fri Dec 07, 2018 3:41 pm",
+		"type":"forum"
+	}
