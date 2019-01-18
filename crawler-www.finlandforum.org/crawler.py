@@ -107,10 +107,9 @@ def get_html_link(link_list) :
         # 提取 论坛 评论
         reviews = soup.select(".content")
         review = ""
-        for rev in reviews :
-            if re.search(r"<!--.*-->", rev.text, re.S) is not None :
-                continue
-            review = review + "<p>" + reviewDeal.deal_review(rev.text) + "<p>"
+        if len(reviews) > 2 :
+            for rev in reviews[2:] :
+                review = review + "<p>" + reviewDeal.deal_review(rev.text) + "<p>"
         # 通过标签名查找 时间 
         time = ""
         if len(soup.select('.author')) == 0 :
@@ -164,7 +163,7 @@ def inner_after(dataList, data, url) :
     # 去掉结尾的论坛标记
     title = soup.title.string.replace(" - Finland Forum", "")
     url = url
-    # 提取 论坛 内容
+    # 提取 论坛 内容  后几页论坛内容为空
     content = ""
     # 提取 论坛 评论
     reviews = soup.select(".content")
@@ -221,10 +220,9 @@ def visit_single_html(url) :
     # 提取 论坛 评论
     reviews = soup.select(".content")
     review = ""
-    for rev in reviews :
-        if re.search(r"<!--.*-->", rev.text, re.S) is not None :
-            continue
-        review = review + "<p>" + reviewDeal.deal_review(rev.text) + "<p>"
+    if len(reviews) > 2 :
+        for rev in reviews[2:] :
+            review = review + "<p>" + reviewDeal.deal_review(rev.text) + "<p>"
     # 通过标签名查找 时间 
     time = ""
     if len(soup.select('.author')) == 0 :
