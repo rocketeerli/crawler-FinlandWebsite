@@ -286,7 +286,7 @@ def main() :
     urllib3.disable_warnings()
     url = 'https://www.finlandforum.org/'
     topic_link_list = get_html(url)
-    page_link_list = get_page_html(topic_link_list[13:])
+    page_link_list = get_page_html(topic_link_list)
     for link in page_link_list :
         print(link)
         fun_call(url, link)
